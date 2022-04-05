@@ -3,6 +3,7 @@ pipeline {
     agent any
     environment{
         DOCKER_IMAGE           = "trungnd31/nginx"
+        PRIVATE_KEY            = credentials('privatekey')
     }
     stages {
         stage("Build"){
@@ -35,7 +36,7 @@ pipeline {
             steps {
                 withCredentials([usernamePassword(credentialsId: 'docker-hub', usernameVariable: 'DOCKER_USERNAME', passwordVariable: 'DOCKER_PASSWORD')]) {
                     ansiblePlaybook(
-                        credentialsId: 'private_key',
+                        credentialsId: 'privatekey',
                         playbook: 'playbook.yml',
                         inventory: 'hosts',
                         become: 'yes',
